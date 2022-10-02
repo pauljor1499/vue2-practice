@@ -3,11 +3,9 @@
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld";
+import HelloWorld from "../components/Child.vue";
 
 export default {
-    name: "Home",
-
     components: {
         HelloWorld,
     },
