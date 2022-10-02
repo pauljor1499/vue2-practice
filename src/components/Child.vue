@@ -1,13 +1,31 @@
 <template>
     <div class="main-content">
         <div class="actions">
-            <v-text-field outlined dense label="First name"> </v-text-field>
-            <v-text-field outlined dense label="Middle name"> </v-text-field>
-            <v-text-field outlined dense label="Last name"> </v-text-field>
+            <v-text-field
+                outlined
+                dense
+                label="First name"
+                v-model="input_student.first_name"
+            >
+            </v-text-field>
+            <v-text-field
+                outlined
+                dense
+                label="Middle name"
+                v-model="input_student.middle_name"
+            >
+            </v-text-field>
+            <v-text-field
+                outlined
+                dense
+                label="Last name"
+                v-model="input_student.last_name"
+            >
+            </v-text-field>
 
             <div class="action-buttons">
                 <v-btn color="primary"> Clear </v-btn>
-                <v-btn color="primary">
+                <v-btn color="primary" @click="addStudent()">
                     <v-icon dark> mdi-plus </v-icon>Add
                 </v-btn>
                 <v-btn color="green">
@@ -34,28 +52,14 @@
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td>Jose</td>
-                        <td>Sample</td>
-                        <td>Rizal</td>
+                    <tr v-for="(student, index) in students" :key="index">
+                        <td>{{ student.first_name }}</td>
+                        <td>{{ student.middle_name }}</td>
+                        <td>{{ student.last_name }}</td>
                         <td>
-                            <v-btn color="red"> view </v-btn>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jose</td>
-                        <td>Sample</td>
-                        <td>Rizal</td>
-                        <td>
-                            <v-btn color="red"> view </v-btn>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jose</td>
-                        <td>Sample</td>
-                        <td>Rizal</td>
-                        <td>
-                            <v-btn color="red"> view </v-btn>
+                            <v-btn color="red" @click="selectStudent(index)">
+                                view
+                            </v-btn>
                         </td>
                     </tr>
                 </tbody>
@@ -63,6 +67,75 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            selected_index: "",
+
+            input_student: {
+                first_name: "",
+                middle_name: "",
+                last_name: "",
+            },
+
+            student: {
+                first_name: "",
+                middle_name: "",
+                last_name: "",
+            },
+
+            students: [
+                {
+                    first_name: "Student 1",
+                    middle_name: "",
+                    last_name: "Student 1",
+                },
+
+                {
+                    first_name: "Student 2",
+                    middle_name: "",
+                    last_name: "Student 2",
+                },
+
+                {
+                    first_name: "Student 3",
+                    middle_name: "",
+                    last_name: "Student 3",
+                },
+            ],
+        };
+    },
+
+    methods: {
+        selectStudent(index) {
+            this.selected_index = index;
+            this.input_student.first_name = this.students[index].first_name;
+            this.input_student.middle_name = this.students[index].middle_name;
+            this.input_student.last_name = this.students[index].last_name;
+        },
+
+        addStudent() {
+            const new_student = {
+                first_name: this.input_student.first_name,
+                middle_name: this.input_student.middle_name,
+                last_name: this.input_student.last_name,
+            };
+
+            this.students.push(new_student);
+        },
+
+        // updateStudent() {
+        //     const update_student = {
+        //         first_name: this.input_student.first_name,
+        //         middle_name: this.input_student.middle_name,
+        //         last_name: this.input_student.last_name,
+        //     };
+        // },
+    },
+};
+</script>
 
 <style scoped>
 .main-content {
