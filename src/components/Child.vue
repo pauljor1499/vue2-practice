@@ -76,9 +76,6 @@
     color: #ffff;
 }
 
-.actions {
-}
-
 .action-buttons {
     display: flex;
     gap: 10px;
