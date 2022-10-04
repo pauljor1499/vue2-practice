@@ -24,14 +24,33 @@
             </v-text-field>
 
             <div class="action-buttons">
-                <v-btn color="primary"> Clear </v-btn>
-                <v-btn color="primary" @click="addStudent()">
+                <v-btn
+                    color="primary"
+                    @click="resetFields()"
+                    :disabled="!hasSelected"
+                >
+                    Clear
+                </v-btn>
+                <v-btn
+                    color="primary"
+                    @click="addStudent()"
+                    :disabled="hasSelected"
+                >
                     <v-icon dark> mdi-plus </v-icon>Add
                 </v-btn>
-                <v-btn color="green">
-                    <v-icon dark color="white"> mdi-update </v-icon> Update
+                <v-btn
+                    color="green"
+                    @click="updateStudent()"
+                    :disabled="validateData"
+                >
+                    <v-icon dark color="white"> mdi-update </v-icon>
+                    Update
                 </v-btn>
-                <v-btn color="red">
+                <v-btn
+                    color="red"
+                    @click="removeStudent()"
+                    :disabled="!hasSelected"
+                >
                     <v-icon dark color="white"> mdi-delete </v-icon>Remove
                 </v-btn>
             </div>
@@ -51,7 +70,7 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody v-if="this.students != ''">
                     <tr v-for="(student, index) in students" :key="index">
                         <td>{{ student.first_name }}</td>
                         <td>{{ student.middle_name }}</td>
@@ -63,6 +82,10 @@
                         </td>
                     </tr>
                 </tbody>
+
+                <tbody v-else>
+                    <h1>No Array Data</h1>
+                </tbody>
             </table>
         </div>
     </div>
@@ -72,7 +95,7 @@
 export default {
     data() {
         return {
-            selected_index: "",
+            selected_index: -1,
 
             input_student: {
                 first_name: "",
@@ -80,7 +103,7 @@ export default {
                 last_name: "",
             },
 
-            student: {
+            old_student: {
                 first_name: "",
                 middle_name: "",
                 last_name: "",
@@ -114,6 +137,10 @@ export default {
             this.input_student.first_name = this.students[index].first_name;
             this.input_student.middle_name = this.students[index].middle_name;
             this.input_student.last_name = this.students[index].last_name;
+
+            this.old_student.first_name = this.students[index].first_name;
+            this.old_student.middle_name = this.students[index].middle_name;
+            this.old_student.last_name = this.students[index].last_name;
         },
 
         addStudent() {
@@ -124,15 +151,55 @@ export default {
             };
 
             this.students.push(new_student);
+            this.resetFields();
         },
 
-        // updateStudent() {
-        //     const update_student = {
-        //         first_name: this.input_student.first_name,
-        //         middle_name: this.input_student.middle_name,
-        //         last_name: this.input_student.last_name,
-        //     };
-        // },
+        updateStudent() {
+            const update_student = {
+                first_name: this.input_student.first_name,
+                middle_name: this.input_student.middle_name,
+                last_name: this.input_student.last_name,
+            };
+
+            this.students.splice(this.selected_index, 1, update_student);
+            this.resetFields();
+        },
+
+        removeStudent() {
+            this.students.splice(this.selected_index, 1);
+            this.resetFields();
+        },
+
+        resetFields() {
+            this.selected_index = -1;
+            this.input_student.first_name = "";
+            this.input_student.middle_name = "";
+            this.input_student.last_name = "";
+
+            JSON.stringify((this.input_student = ""));
+            JSON.stringify((this.old_student = ""));
+        },
+    },
+
+    computed: {
+        hasSelected() {
+            if (this.selected_index != -1) {
+                return true;
+            }
+        },
+
+        validateData() {
+            if (
+                JSON.stringify(this.input_student) ===
+                JSON.stringify(this.old_student)
+
+                // this.input_student.first_name === this.old_student.first_name &&
+                // this.input_student.middle_name ===
+                //     this.old_student.middle_name &&
+                // this.input_student.last_name === this.old_student.last_name
+            )
+                return true;
+        },
     },
 };
 </script>
