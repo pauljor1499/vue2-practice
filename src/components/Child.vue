@@ -172,12 +172,15 @@ export default {
 
         resetFields() {
             this.selected_index = -1;
-            this.input_student.first_name = "";
-            this.input_student.middle_name = "";
-            this.input_student.last_name = "";
 
-            JSON.stringify((this.input_student = ""));
-            JSON.stringify((this.old_student = ""));
+            const reset_fields = {
+                first_name: "",
+                middle_name: "",
+                last_name: "",
+            };
+
+            this.input_student = reset_fields;
+            this.old_student = reset_fields;
         },
     },
 
