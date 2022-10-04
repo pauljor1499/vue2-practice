@@ -27,7 +27,7 @@
                 <v-btn
                     color="primary"
                     @click="resetFields()"
-                    :disabled="!hasSelected"
+                    :disabled="hasData"
                 >
                     Clear
                 </v-btn>
@@ -194,7 +194,8 @@ export default {
         validateData() {
             if (
                 JSON.stringify(this.input_student) ===
-                JSON.stringify(this.old_student)
+                    JSON.stringify(this.old_student) ||
+                this.selected_index == -1
 
                 // this.input_student.first_name === this.old_student.first_name &&
                 // this.input_student.middle_name ===
@@ -202,6 +203,12 @@ export default {
                 // this.input_student.last_name === this.old_student.last_name
             )
                 return true;
+        },
+
+        hasData() {
+            if (JSON.stringify(this.input_student) == "") {
+                return true;
+            }
         },
     },
 };
