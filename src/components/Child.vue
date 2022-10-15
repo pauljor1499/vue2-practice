@@ -134,13 +134,12 @@ export default {
     methods: {
         selectStudent(index) {
             this.selected_index = index;
-            this.input_student.first_name = this.students[index].first_name;
-            this.input_student.middle_name = this.students[index].middle_name;
-            this.input_student.last_name = this.students[index].last_name;
 
-            this.old_student.first_name = this.students[index].first_name;
-            this.old_student.middle_name = this.students[index].middle_name;
-            this.old_student.last_name = this.students[index].last_name;
+            //passing object to object
+            Object.keys(this.students[index]).forEach((key) => {
+                this.input_student[key] = this.students[index][key];
+                this.old_student[key] = this.students[index][key];
+            });
         },
 
         addStudent() {
@@ -150,8 +149,10 @@ export default {
                 last_name: this.input_student.last_name,
             };
 
-            this.students.push(new_student);
-            this.resetFields();
+            if (!Object.values(new_student).includes("")) {
+                this.students.push(new_student);
+                this.resetFields();
+            }
         },
 
         updateStudent() {
@@ -179,8 +180,10 @@ export default {
                 last_name: "",
             };
 
-            this.input_student = reset_fields;
-            this.old_student = reset_fields;
+            Object.keys(reset_fields).forEach((key) => {
+                this.input_student[key] = reset_fields[key];
+                this.old_student[key] = reset_fields[key];
+            });
         },
     },
 
@@ -188,26 +191,27 @@ export default {
         hasSelected() {
             if (this.selected_index != -1) {
                 return true;
+            } else {
+                return false;
             }
         },
 
         validateData() {
             if (
-                JSON.stringify(this.input_student) ===
+                JSON.stringify(this.input_student) ==
                     JSON.stringify(this.old_student) ||
-                this.selected_index == -1
-
-                // this.input_student.first_name === this.old_student.first_name &&
-                // this.input_student.middle_name ===
-                //     this.old_student.middle_name &&
-                // this.input_student.last_name === this.old_student.last_name
-            )
+                this.selected_index < 0
+            ) {
                 return true;
+            }
+            return false;
         },
 
         hasData() {
             if (JSON.stringify(this.input_student) == "") {
                 return true;
+            } else {
+                return false;
             }
         },
     },
@@ -238,18 +242,10 @@ export default {
 table {
     width: 100%;
     border-collapse: collapse;
-    border-bottom: 1px solid black;
 }
 
 td {
     padding: 20px;
-}
-
-thead tr {
-    border-bottom: 1px solid black;
-}
-
-tbody tr {
-    border-bottom: 1px solid black;
+    border: 1px solid #c9c9c9;
 }
 </style>
