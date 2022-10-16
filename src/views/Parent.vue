@@ -1,13 +1,18 @@
 <template>
-    <hello-world />
+    <div>
+        <HeaderComponent />
+        <ChildComponent />
+    </div>
 </template>
 
 <script>
-import HelloWorld from "../components/Child.vue";
+import ChildComponent from "../components/Child.vue";
+import HeaderComponent from "../components/header.vue";
 
 export default {
     components: {
-        HelloWorld,
+        ChildComponent,
+        HeaderComponent,
     },
 };
 </script>
